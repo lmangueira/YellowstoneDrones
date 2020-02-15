@@ -7,6 +7,12 @@ from drone.drone import Drone
 
 class TestDrone(TestCase):
 
+    def test_move_invalid_value(self):
+        drone = Drone(0, 0, "N")
+        with self.assertRaises(ValueError) as context:
+            drone.move("A")
+        self.assertTrue(ValueError, context.exception)
+
     def test_move_forward_N(self):
         drone = Drone(0, 0, "N")
         drone.move("M")

@@ -47,6 +47,8 @@ class Drone:
             self._rotate_clockwise()
         elif movement == "L":
             self._rotate_counterclockwise()
+        else:
+            raise ValueError(f'{movement} is not a valid movement')
 
     def _move_forward(self):
         """
