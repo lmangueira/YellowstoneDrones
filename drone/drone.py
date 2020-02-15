@@ -21,6 +21,20 @@ class Drone:
         self.position_y = position_y
         self.orientation = orientation
 
+    @property
+    def current_position(self):
+        return f'{self.position_x} {self.position_y} {self.orientation}'
+
+    def move_with_instructions(self, movements):
+        """
+        Moves the drone by passing some instructions
+        :param movements: Movements to do
+        :return: last position of the Drone
+        """
+        for movement in movements.replace(" ", ""):
+            self.move(movement)
+        return self.current_position
+
     def move(self, movement):
         """
         Moves the Drone
@@ -31,7 +45,7 @@ class Drone:
             self._move_forward()
         elif movement == "R":
             self._rotate_clockwise()
-        elif movement == "R":
+        elif movement == "L":
             self._rotate_counterclockwise()
 
     def _move_forward(self):
