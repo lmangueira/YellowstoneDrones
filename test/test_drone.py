@@ -3,9 +3,13 @@ __email__ = "luis.manuel.angueira@gmail.com"
 
 from unittest import TestCase
 from drone.drone import Drone
+from drone.area import Area
 
 
 class TestDrone(TestCase):
+
+    def setUp(self) -> None:
+        self.area = Area(5, 5)
 
     def test_move_invalid_value(self):
         drone = Drone(0, 0, "N")
@@ -13,15 +17,27 @@ class TestDrone(TestCase):
             drone.move("A")
         self.assertTrue(ValueError, context.exception)
 
+    def test_move_outbounds_X(self):
+        drone = Drone(0, 4, "N", self.area)
+        drone.move("M")
+        drone.move("M")
+        self.assertTrue(5, drone.position_y)
+
+    def test_move_outbounds_Y(self):
+        drone = Drone(4, 0, "E", self.area)
+        drone.move("M")
+        drone.move("M")
+        self.assertTrue(5, drone.position_x)
+
     def test_move_forward_N(self):
         drone = Drone(0, 0, "N")
         drone.move("M")
-        self.assertEqual(1, drone.position_x)
+        self.assertEqual(1, drone.position_y)
 
     def test_move_forward_E(self):
         drone = Drone(0, 0, "E")
         drone.move("M")
-        self.assertEqual(1, drone.position_y)
+        self.assertEqual(1, drone.position_x)
 
     def test_move_L(self):
         drone = Drone(0, 0, "N")
@@ -72,26 +88,6 @@ class TestDrone(TestCase):
         drone = Drone(0, 0, "W")
         drone._rotate_counterclockwise()
         self.assertEqual("S", drone.orientation)
-
-    def test_move_forward_N(self):
-        drone = Drone(2, 2, "N")
-        drone._move_forward()
-        self.assertEqual(3, drone.position_y)
-
-    def test_move_forward_E(self):
-        drone = Drone(2, 2, "E")
-        drone._move_forward()
-        self.assertEqual(3, drone.position_x)
-
-    def test_move_forward_S(self):
-        drone = Drone(2, 2, "S")
-        drone._move_forward()
-        self.assertEqual(1, drone.position_y)
-
-    def test_move_forward_W(self):
-        drone = Drone(2, 2, "W")
-        drone._move_forward()
-        self.assertEqual(1, drone.position_x)
 
     def test_current_position_incorrect(self):
         drone = Drone(2, 2, "W")

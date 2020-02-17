@@ -16,10 +16,11 @@ class Drone:
     - Rotate Clockwise
     - Rotate Counterclockwise
     """
-    def __init__(self, position_x, position_y, orientation):
+    def __init__(self, position_x, position_y, orientation, area=None):
         self.position_x = position_x
         self.position_y = position_y
         self.orientation = orientation
+        self.area = area
 
     @property
     def current_position(self):
@@ -41,6 +42,7 @@ class Drone:
         :param movement: Movement to do
         :return:
         """
+        last_position = (self.position_x, self.position_y)
         if movement == "M":
             self._move_forward()
         elif movement == "R":
@@ -50,6 +52,11 @@ class Drone:
         else:
             raise ValueError(f'{movement} is not a valid movement')
 
+        if self.area is not None:
+            if not self.area.valid_movement(self.position_x, self.position_y):
+                print("Drone trying to move outbounds. Better stay at bound...")
+                self.position_x, self.position_y = last_position
+                
     def _move_forward(self):
         """
         Moves the Drone forward
